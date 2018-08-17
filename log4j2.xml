@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" name="spring-boot-log-to-kafka-example" packages="com.ms.lib.infrastructure.eurekaservice">
+    <Appenders>
+        <Kafka name="kafkaAppender" topic="0v8uyhvb-logs">
+            <JSONLayout />
+            <Property name="bootstrap.servers">xyz.com:9094,xyz.com:9094,xyz.com:9094</Property>
+            <Property name="security.protocol">SASL_SSL</Property>
+            <Property name="sasl.mechanism">SCRAM-SHA-256</Property>
+            <Property name="sasl.jaas.config">org.apache.kafka.common.security.scram.ScramLoginModule required username="uname" password="pwd-gkB8qv4P";
+            </Property>
+        </Kafka>
+
+        <!--stdout/stderr included for testing Oozie log4j edits-->
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5p [%-7t] %F:%L - %m%n"/>
+        </Console>
+        <Console name="stderr" target="SYSTEM_ERR">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5p [%-7t] %F:%L - %m%n" />
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="ACCEPT" />
+            </Filters>
+        </Console>
+
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="kafkaAppender"/>
+
+            <!--stdout/stderr included for testing Oozie log4j edits-->
+            <AppenderRef ref="stdout"/>
+            <AppenderRef ref="stderr"/>
+        </Root>
+        <Logger name="org.apache.kafka" level="warn" />
+    </Loggers>
+</Configuration>
